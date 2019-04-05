@@ -1,4 +1,3 @@
-import numpy as np
 import pickle
 from sklearn.ensemble import RandomForestClassifier
 
@@ -11,9 +10,6 @@ class RF():
         model =RandomForestClassifier(n_estimators=50, min_samples_split=4, \
                                       class_weight='balanced',random_state=1,n_jobs=5)
         model.fit(tr_data,tr_label)
-
-
-        predictions=model.predict(tr_data)
 
         result=model.score(tr_data,tr_label)
         print 'Train Accuracy: {0:02f}'.format(result)

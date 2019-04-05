@@ -1,7 +1,5 @@
-import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
-import sys
 
 def make_train_test(data_path):
     seed=6237
