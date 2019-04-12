@@ -8,14 +8,13 @@ import sklearn
 import sklearn.preprocessing
 from sklearn.utils import check_random_state
 from functools import partial
+from Explanation.LIME.discretize import QuartileDiscretizer
+from Explanation.LIME.discretize import DecileDiscretizer
+from Explanation.LIME.discretize import EntropyDiscretizer
+from Explanation.LIME.discretize import BaseDiscretizer
+from Explanation.LIME.discretize import StatsDiscretizer
 
-from discretize import QuartileDiscretizer
-from discretize import DecileDiscretizer
-from discretize import EntropyDiscretizer
-from discretize import BaseDiscretizer
-from discretize import StatsDiscretizer
-
-import LIME_base
+import Explanation.LIME.LIME_base as LIME_base
 from . import explanation
 
 class TableDomainMapper(explanation.DomainMapper):

@@ -1,7 +1,7 @@
 from torch.nn import functional as F
 import torch
 from torch.autograd import Variable
-import cv2
+#import cv2
 import sys
 import numpy as np
 from matplotlib import pyplot as plt
@@ -29,9 +29,9 @@ def cuda_available():
     return use_cuda
 
 def load_image(path):
-    img = cv2.imread(path, 1)
-    img = cv2.resize(img, (224, 224))
-    img = np.float32(img) / 255
+   # img = cv2.imread(path, 1)
+   # img = cv2.resize(img, (224, 224))
+   # img = np.float32(img) / 255
 
     return img
 

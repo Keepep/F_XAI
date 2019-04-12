@@ -4,13 +4,13 @@ from tqdm import tqdm
 from utils import *
 from sklearn.utils import check_random_state
 from sklearn.linear_model import Ridge, lars_path
-
+import numpy as np
 
 class LogisticRegression(nn.Module):
     def __init__(self, input_size, num_classes):
         super(LogisticRegression, self).__init__()
 
-        if cuda_available():
+        if torch.cuda_available():
             self.linear = nn.Linear(input_size, num_classes).cuda()
         else:
             self.linear = nn.Linear(input_size, num_classes)
@@ -55,9 +55,9 @@ class lime_base():
         argsort=np.argsort(weight.data.cpu().numpy())
 
         k_index=argsort[0][-self.K:]
-        print weight
-        print weight[0][k_index[0]]
-        print weight[0][k_index[9]]
+        print (weight)
+        print (weight[0][k_index[0]])
+        print (weight[0][k_index[9]])
 
         #k_index=argsort[0][:self.K]
         return k_index
