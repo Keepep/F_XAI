@@ -87,6 +87,8 @@ class lime_base():
                                          clf.coef_ * data[0]),
                                      key=lambda x: np.abs(x[1]),
                                      reverse=True)
+
+            #return feature names ordering it from smallest to largest weight
             return np.array([x[0] for x in feature_weights[:num_features]])
         elif method == 'lasso_path':
             weighted_data = ((data - np.average(data, axis=0, weights=weights))
@@ -164,21 +166,24 @@ class lime_base():
                                                feature_selection)
 
         if model_regressor is None:
-            model_regressor = Ridge(alpha=1, fit_intercept=True,
+            model_regressor = Ridge(alpha=0.08, fit_intercept=True,
                                     random_state=self.random_state)
         easy_model = model_regressor
         easy_model.fit(neighborhood_data[:, used_features],
                        labels_column, sample_weight=weights)
+
         prediction_score = easy_model.score(
             neighborhood_data[:, used_features],
             labels_column, sample_weight=weights)
-
+        #local_pred means result about instance from a new simple model
         local_pred = easy_model.predict(neighborhood_data[0, used_features].reshape(1, -1))
 
         if self.verbose:
             print('Intercept', easy_model.intercept_)
             print('Prediction_local', local_pred,)
             print('Right:', neighborhood_labels[0, label])
+
+        #easy_model.coef: contributions for features
         return (easy_model.intercept_,
                 sorted(zip(used_features, easy_model.coef_),
                        key=lambda x: np.abs(x[1]), reverse=True),

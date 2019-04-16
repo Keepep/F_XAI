@@ -158,7 +158,7 @@ class lime_tabular():
 
         #Width of proximity measure
         if kernel_width is None:
-            kernel_width = np.sqrt(training_data.shape[1]) * .75
+            kernel_width = np.sqrt(training_data.shape[1]) * .25#.75
         kernel_width = float(kernel_width)
 
         #Proximity measure
@@ -175,6 +175,7 @@ class lime_tabular():
         # Though set has no role to play if training data stats are provided
         self.scaler = None
         self.scaler = sklearn.preprocessing.StandardScaler(with_mean=False)
+        #Generate scaler.scale and scaler.mean from training data
         self.scaler.fit(training_data)
         self.feature_values = {}
         self.feature_frequencies = {}
@@ -268,6 +269,9 @@ class lime_tabular():
         if feature_names is None:
             feature_names = [str(x) for x in range(data_row.shape[0])]
 
+        #xgboost
+
+        data_row=data_row.flatten()
         values = self.convert_and_round(data_row)
 
         for i in self.categorical_features:
@@ -352,7 +356,7 @@ class lime_tabular():
             if self.sample_around_instance:
                 data = data * self.scaler.scale_ + data_row
             else:
-                #rescaling and adding bias to data ~ N(0,1)
+                #rescaling and adding mean to data ~ N(0,1)
                 data = data * self.scaler.scale_ + self.scaler.mean_
             categorical_features = self.categorical_features
             first_row = data_row

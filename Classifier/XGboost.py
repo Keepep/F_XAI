@@ -1,6 +1,8 @@
 import xgboost as xgb
 import pickle
 
+
+import numpy as np
 class XGB():
     def __init__(self,model_name):
 
@@ -9,7 +11,6 @@ class XGB():
     def train(self,tr_data,tr_label):
         model =xgb.XGBClassifier(objective="binary:logistic", random_state=112)
         model.fit(tr_data,tr_label)
-
 
         result=model.score(tr_data,tr_label)
         print 'Train Accuracy: {0:02f}'.format(result)

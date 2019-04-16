@@ -7,7 +7,11 @@ def make_train_test(data_path):
 
     label_name='RiskPerformance'
     df_x=load_df.drop([label_name],axis=1)
+    df_x=df_x.drop([0,1,2],axis=0)
+
     df_y=load_df[label_name]
+    df_y=df_y.drop([0,1,2],axis=0)
+
     tr_data, te_data, tr_label, te_label=train_test_split(df_x, df_y, random_state=seed)
 
-    return tr_data, te_data, tr_label, te_label
+    return tr_data, te_data,tr_label, te_label
