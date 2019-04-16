@@ -109,7 +109,7 @@ class Explanation(object):
             self.max_value = 1.0
             self.dummy_label = 1
         else:
-            print 'hh'
+            print ('hh')
 
     def available_labels(self):
         """

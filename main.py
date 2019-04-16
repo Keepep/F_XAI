@@ -1,7 +1,7 @@
 
 import argparse
 from Explanation.LIME_main import *
-
+from Explanation.Anchors_main import *
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='XAI for financial data')
@@ -15,5 +15,6 @@ if __name__ == '__main__':
 
         lime.build_for_FICO()
 
-
-
+    if args.Explanation == 'Anchors':
+        anchor =anchors_libraray(args.data_path, args.model_name)
+        anchor.anchor()
