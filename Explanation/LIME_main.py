@@ -51,7 +51,7 @@ class lime_libraray():
                                                          )).astype(float)
 
         for row in tr_data.iterrows():
-            sav_name = 'LIME_result/result_' + str(i) + '.html'
+            sav_name = 'result/LIME_result/result_' + str(i) + '.html'
 
             index,value=row
             tmp = np.asarray(value, dtype=np.float32)
