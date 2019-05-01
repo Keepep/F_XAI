@@ -14,10 +14,10 @@ class shap_library():
         model = pickle.load(open(self.model, 'rb'))
 
         # the index of instances
-        ins = 1
-
+        ins = 2
+        print te_data.iloc[[ins]]
         explainer = KernelExplainer(model.predict_proba, tr_data, nsamples=100, link="logit")
         # Get shapley values
-        shap_value = explainer.shap_values(te_data.iloc[ins], nsamples=100)
+        shap_value = explainer.shap_values(te_data.iloc[[ins]], nsamples=100)
 
-        plot=force_plot(explainer.expected_value[ins], shap_value[ins], te_data.iloc[ins], matplotlib=True, link="logit")
+        plot=force_plot(explainer.expected_value[ins], shap_value[ins], te_data.iloc[[ins]], matplotlib=True, link="logit")

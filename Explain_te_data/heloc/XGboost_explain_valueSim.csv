@@ -1,0 +1,12 @@
+MSinceOldestTradeOpen,MSinceMostRecentTradeOpen,AverageMInFile,NumSatisfactoryTrades,NumTrades60Ever2DerogPubRec,NumTrades90Ever2DerogPubRec,PercentTradesNeverDelq,MSinceMostRecentDelq,MaxDelq2PublicRecLast12M,MaxDelqEver,NumTotalTrades,NumTradesOpeninLast12M,PercentInstallTrades,MSinceMostRecentInqexcl7days,NumInqLast6M,NumInqLast6Mexcl7days,NetFractionRevolvingBurden,NetFractionInstallBurden,NumRevolvingTradesWBalance,NumInstallTradesWBalance,NumBank2NatlTradesWHighUtilization,PercentTradesWBalance
+351,13,155,25,0,0,100,-7,6,7,25,0,16,0,0,0,56,-8,7,1,2,60
+368,10,111,25,0,0,96,-8,6,6,28,1,11,0,0,0,31,-8,3,1,2,44
+373,12,88,21,0,0,90,-8,5,6,21,0,19,0,4,4,50,-8,6,1,4,58
+256,27,120,17,0,0,100,-7,7,8,17,0,6,0,3,2,34,-8,3,1,1,45
+247,7,87,25,0,0,100,-7,7,8,17,2,20,3,1,1,59,-8,7,2,3,75
+238,4,121,15,0,0,100,-7,7,8,15,1,13,0,2,2,26,-8,4,1,0,56
+231,13,158,15,0,0,100,-7,7,8,17,0,24,-7,1,1,31,-8,4,1,1,56
+378,15,120,15,0,0,93,19,6,6,15,0,13,0,0,0,59,-8,6,1,2,78
+263,15,103,22,0,0,100,-7,7,8,24,0,25,0,0,0,72,-8,9,2,2,92
+344,6,137,19,0,0,100,-7,7,8,20,1,25,0,1,1,10,-8,3,2,0,63
+445,7,147,15,0,0,100,-7,7,8,16,1,13,0,1,1,36,-8,10,1,2,92

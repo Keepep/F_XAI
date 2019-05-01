@@ -26,3 +26,8 @@ class XGB():
 
 
 
+    def get_prob(self,te_data):
+        model=pickle.load(open(self.trained_model_path,'rb'))
+        prob=model.predict_proba(te_data)
+
+        return prob
