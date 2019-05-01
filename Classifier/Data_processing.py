@@ -14,6 +14,8 @@ def make_train_test(data_path):
         label_name='RiskPerformance'
     elif 'UCI_Credit' in data_path:
         label_name='default.payment.next.month'
+    elif 'statlog' in data_path:
+        label_name = 'Credit'
     else:
         print('label name not vaild!')
         sys.exit(0)
@@ -77,7 +79,7 @@ def UCI_data_preprocessing(data_path):
     return file_name
 
 
-def make_explain_data(te_data, prob,model_name, data_path):
+def make_explain_data(te_data, prob, model_name, data_path):
     load_df=te_data
     load_df_copy=te_data
     df=load_df.values
@@ -123,9 +125,8 @@ def make_explain_data(te_data, prob,model_name, data_path):
 
 
     base_index=random.randrange(prob.shape[0]/2,prob.shape[0])
-    while( prob[prob_index[base_index]] <= 0.7):
+    while( prob[prob_index[base_index]] <= 0.6):
         base_index = random.randrange(prob.shape[0] / 2, prob.shape[0])
-
 
     base_value=load_df_copy.iloc[prob_index[base_index]]
 
@@ -176,6 +177,17 @@ def make_explain_data(te_data, prob,model_name, data_path):
             df_valueSim.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_valueSim.csv', index=False)
             df_probSim.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_probSim.csv', index=False)
             df_random.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_random.csv', index=False)
+
+    elif 'statlog' in data_path:
+        if 'Random_Forest' == model_name:
+            df_valueSim.to_csv('../Explain_te_data/statlog/RF_explain_valueSim.csv', index=False)
+            df_probSim.to_csv('../Explain_te_data/statlog/RF_explain_probSim.csv', index=False)
+            df_random.to_csv('../Explain_te_data/statlog/RF_explain_random.csv', index=False)
+        elif 'XGboost' ==model_name:
+            df_valueSim.to_csv('../Explain_te_data/statlog/XGboost_explain_valueSim.csv', index=False)
+            df_probSim.to_csv('../Explain_te_data/statlog/XGboost_explain_probSim.csv', index=False)
+            df_random.to_csv('../Explain_te_data/statlog/XGboost_explain_random.csv', index=False)
+
 
         """
         #######
