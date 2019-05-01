@@ -217,3 +217,28 @@ def make_explain_data(te_data, prob,model_name, data_path):
 
         ##############
         """
+
+def get_data(data_path):
+
+    # Read file in csv format
+    train = pd.read_csv(data_path+'_train.csv')
+    test = pd.read_csv(data_path+'_test.csv')
+
+    feature, target = get_feature(data_path, train)
+
+    #train_x, test_x, train_y, test_y
+    return train[feature], test[feature], train[target], test[target]
+
+def get_feature(data_path, x):
+
+    if 'HELOC' in data_path:
+        label_name = 'RiskPerformance'
+    elif 'UCI_Credit' in data_path:
+        label_name = 'default.payment.next.month'
+    else:
+        print('label name not vaild!')
+        sys.exit(0)
+
+    features = [c for c in x.columns if c != label_name]
+
+    return features, label_name
