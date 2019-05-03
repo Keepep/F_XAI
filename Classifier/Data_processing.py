@@ -5,36 +5,50 @@ import random
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import euclidean_distances
 import numpy as np
+
 import pickle
+
 def make_train_test(data_path):
     seed=6237
     load_df=pd.read_csv(data_path)
 
-    if 'HELOC' in data_path:
-        label_name='RiskPerformance'
-    elif 'UCI_Credit' in data_path:
-        label_name='default.payment.next.month'
-    elif 'statlog' in data_path:
-        label_name = 'Credit'
+    features, label_name = get_col_name(data_path, load_df)
+
+    # remove .csv
+    data_path_rm_csv = data_path[:-4]
+    splited_file = os.path.isfile(data_path_rm_csv + '_train.csv') and os.path.isfile(data_path_rm_csv + '_test.csv')
+
+    if not splited_file:
+        df_x=load_df.drop([label_name],axis=1)
+        df_x=df_x.drop([0, 1, 2], axis=0)
+
+        df_y=load_df[label_name]
+        df_y=df_y.drop([0, 1, 2], axis=0)
+
+        tr_data, te_data, tr_label, te_label = train_test_split(df_x, df_y, random_state=seed)
+
+        train_data = pd.concat([tr_data, tr_label],axis=1)
+        test_data = pd.concat([te_data, te_label], axis=1)
+
+        train_data.to_csv(data_path_rm_csv + '_train.csv')
+        test_data.to_csv(data_path_rm_csv + '_test.csv')
     else:
-        print('label name not vaild!')
-        sys.exit(0)
+        tr = pd.read_csv(data_path_rm_csv + '_train.csv')
+        te = pd.read_csv(data_path_rm_csv + '_test.csv')
 
-    df_x=load_df.drop([label_name],axis=1)
-    df_x=df_x.drop([0,1,2],axis=0)
-
-    df_y=load_df[label_name]
-    df_y=df_y.drop([0,1,2],axis=0)
-
-    tr_data, te_data, tr_label, te_label=train_test_split(df_x, df_y, random_state=seed)
+        tr_data = tr[features]
+        te_data = te[features]
+        tr_label = tr[label_name]
+        te_label = te[label_name]
 
     return tr_data, te_data,tr_label, te_label
 
 
 def fico_data_preprocessing(data_path):
-    file_name_v1='../Dataset/HELOC_ExternalRemoved.csv'
-    file_name_v2='../Dataset/HELOC_-9Removed.csv'
-    file_name_v3='../Dataset/HELOC_allRemoved.csv'
+    file_name_v1='Dataset/HELOC_ExternalRemoved.csv'
+    file_name_v2='Dataset/HELOC_-9Removed.csv'
+    file_name_v3='Dataset/HELOC_allRemoved.csv'
+
     if os.path.exists(file_name_v3):
         return file_name_v3
 
@@ -44,13 +58,11 @@ def fico_data_preprocessing(data_path):
 
     df=load_df.drop([label_name],axis=1)
 
-    del_list=list()
     for row in load_df.iterrows():
         index,value =row
         count=value.value_counts()
         if count[0]==23:
             count+=1
-            del_list.append(index)
             load_df=load_df.drop([index],axis=0)
 
     df2 = load_df
@@ -65,7 +77,7 @@ def fico_data_preprocessing(data_path):
 
 def UCI_data_preprocessing(data_path):
 
-    file_name='../Dataset/UCI_Credit_Card_IDRemoved.csv'
+    file_name='Dataset/UCI_Credit_Card_IDRemoved.csv'
     if os.path.exists(file_name):
         return file_name
 
@@ -79,7 +91,7 @@ def UCI_data_preprocessing(data_path):
     return file_name
 
 
-def make_explain_data(te_data, prob, model_name, data_path):
+def make_explain_data(te_data, prob, save_model_path, data_path):
     load_df=te_data
     load_df_copy=te_data
     df=load_df.values
@@ -124,9 +136,9 @@ def make_explain_data(te_data, prob, model_name, data_path):
     prob_index=np.argsort(prob)
 
 
-    base_index=random.randrange(prob.shape[0]/2,prob.shape[0])
-    while( prob[prob_index[base_index]] <= 0.6):
-        base_index = random.randrange(prob.shape[0] / 2, prob.shape[0])
+    base_index=random.randrange(int(prob.shape[0]/2),prob.shape[0])
+    while( prob[prob_index[base_index]] <= 0.5):
+        base_index = random.randrange(int(prob.shape[0] / 2), prob.shape[0])
 
     base_value=load_df_copy.iloc[prob_index[base_index]]
 
@@ -158,36 +170,24 @@ def make_explain_data(te_data, prob, model_name, data_path):
         df_random = pd.concat([df_random, tmp], ignore_index=True)
 
 
-    if 'heloc' in data_path:
-        if 'Random_Forest'==model_name:
-            df_valueSim.to_csv('../Explain_te_data/heloc/RF_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/heloc/RF_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/heloc/RF_explain_random.csv', index=False)
-        elif 'XGboost' ==model_name:
-            df_valueSim.to_csv('../Explain_te_data/heloc/XGboost_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/heloc/XGboost_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/heloc/XGboost_explain_random.csv', index=False)
-
+    if 'heloc' in data_path or 'HELOC' in data_path:
+        data_name = 'heloc'
     elif 'UCI_Credit_Card' in data_path:
-        if 'Random_Forest' == model_name:
-            df_valueSim.to_csv('../Explain_te_data/UCI_Credit_Card/RF_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/UCI_Credit_Card/RF_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/UCI_Credit_Card/RF_explain_random.csv', index=False)
-        elif 'XGboost' ==model_name:
-            df_valueSim.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/UCI_Credit_Card/XGboost_explain_random.csv', index=False)
-
+        data_name = 'UCI_Credit_Card'
     elif 'statlog' in data_path:
-        if 'Random_Forest' == model_name:
-            df_valueSim.to_csv('../Explain_te_data/statlog/RF_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/statlog/RF_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/statlog/RF_explain_random.csv', index=False)
-        elif 'XGboost' ==model_name:
-            df_valueSim.to_csv('../Explain_te_data/statlog/XGboost_explain_valueSim.csv', index=False)
-            df_probSim.to_csv('../Explain_te_data/statlog/XGboost_explain_probSim.csv', index=False)
-            df_random.to_csv('../Explain_te_data/statlog/XGboost_explain_random.csv', index=False)
+        data_name = 'statlog'
+    else:
+        # print '{0} is not valid dataset path'.format(data_path)
+        pass
 
+    if'Random_Forest'in save_model_path:
+        df_valueSim.to_csv('Explain_te_data/'+ data_name +'/RF_explain_valueSim.csv', index=False)
+        df_probSim.to_csv('Explain_te_data/'+ data_name +'/RF_explain_probSim.csv', index=False)
+        df_random.to_csv('Explain_te_data/'+ data_name +'/RF_explain_random.csv', index=False)
+    elif 'XGboost' in save_model_path:
+        df_valueSim.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_valueSim.csv', index=False)
+        df_probSim.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_probSim.csv', index=False)
+        df_random.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_random.csv', index=False)
 
         """
         #######
@@ -236,21 +236,22 @@ def get_data(data_path):
     train = pd.read_csv(data_path+'_train.csv')
     test = pd.read_csv(data_path+'_test.csv')
 
-    feature, target = get_feature(data_path, train)
+    feature, target = get_col_name(data_path, train)
 
     #train_x, test_x, train_y, test_y
     return train[feature], test[feature], train[target], test[target]
 
-def get_feature(data_path, x):
+def get_col_name(data_path, x):
 
-    if 'HELOC' in data_path:
+    if 'heloc' in data_path or'HELOC' in data_path:
         label_name = 'RiskPerformance'
     elif 'UCI_Credit' in data_path:
         label_name = 'default.payment.next.month'
+    elif 'statlog' in data_path:
+        label_name = 'Credit'
     else:
         print('label name not vaild!')
         sys.exit(0)
-
     features = [c for c in x.columns if c != label_name]
 
     return features, label_name

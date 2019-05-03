@@ -7,10 +7,28 @@ import itertools
 import xgboost as xgb
 from pandas import DataFrame as df
 from tqdm import tqdm
+import fnmatch
+import sys, os
+
 class lime_libraray():
-    def __init__(self,in_path,model):
+    def __init__(self, in_path, model_name):
         self.in_path=in_path
-        self.model=model
+        self.model_name = model_name
+        if 'heloc' in self.in_path or 'HELOC' in self.in_path:
+            self.data_name = 'heloc'
+            self.feature_i = 0
+            self.class_label=['Bad', 'Good']
+        elif 'UCI_Credit_Card' in self.in_path:
+            self.data_name = 'UCI_Credit_Card'
+            self.feature_i = 23
+            self.class_label = ['payment', 'not payment']
+        elif 'statlog' in self.in_path:
+            self.data_name = 'statlog'
+            self.feature_i = 20
+            self.class_label = ['Bad', 'Good']
+        else:
+            # print 'There {0} data is not valid path'.format(self.in_path)
+            sys.exit(0)
 
     def build(self):
         tr_data, te_data, tr_label, te_label = make_train_test(self.in_path)
@@ -20,44 +38,27 @@ class lime_libraray():
         load_df = pd.read_csv(self.in_path)
         class_name = list()
 
-
         for col in load_df.columns:
             feature_names.append(col)
 
-
-        if 'Random_Forest' in self.model:
+        if 'Random_Forest' in self.model_name:
             model_n = 'RF'
-        elif 'XGboost' in self.model:
+        elif 'XGboost' in self.model_name:
             model_n = 'XGboost'
 
-
-
-        # delete label feature name
-        if 'HELOC' in self.in_path:
-            del feature_names[0]
-            class_name.append('Bad')
-            class_name.append('Good')
-            df_explain_valueSim = pd.read_csv("Explain_te_data/heloc/" + model_n + '_explain_valueSim.csv')
-            df_explain_probSim = pd.read_csv("Explain_te_data/heloc/" + model_n + '_explain_probSim.csv')
-            df_explain_random = pd.read_csv("Explain_te_data/heloc/" + model_n + '_explain_random.csv')
-
-
-        elif 'UCI_Credit_Card' in self.in_path:
-            del feature_names[23]
-            class_name.append('payment')
-            class_name.append('not payment')
-            df_explain_valueSim = pd.read_csv("Explain_te_data/UCI_Credit_Card/" + model_n + '_explain_valueSim.csv')
-            df_explain_probSim = pd.read_csv("Explain_te_data/UCI_Credit_Card/" + model_n + '_explain_probSim.csv')
-            df_explain_random = pd.read_csv("Explain_te_data/UCI_Credit_Card/" + model_n + '_explain_random.csv')
-
+        del feature_names[self.feature_i]
+        class_name.append(self.class_label[0])
+        class_name.append(self.class_label[1])
+        df_explain_valueSim = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_valueSim.csv')
+        df_explain_probSim = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_probSim.csv')
+        df_explain_random = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_random.csv')
 
         explainer = lime_tabular(tr_data, feature_names=feature_names, \
                                  class_names=class_name, discretize_continuous=False)
-
-        model = pickle.load(open(self.model, 'rb'))
-
-
-
+        # get file name and remove .csv
+        file_name = os.path.basename(self.in_path)[:-4]
+        saved_model_path = 'Classifier/trained_model/' + model_n + '_' + file_name +'.sav'
+        model = pickle.load(open(saved_model_path, 'rb'))
 
         exp_list = [df_explain_valueSim,df_explain_probSim,df_explain_random]
 
@@ -71,23 +72,18 @@ class lime_libraray():
                 feature_size = len(feature_names)
                 tmp = tmp.reshape(1, feature_size)
 
-                if 'XGboost' in self.model:
+                if 'XGboost' in self.model_name:
                     predict_fn_xgb = lambda x: model.predict_proba(df(data=x, columns=feature_names, \
                                                                       index=[np.arange(x.shape[0])])).astype(float)
                     exp = explainer.explain_instance(tmp, predict_fn_xgb, num_features=feature_size, top_labels=1)
 
-                elif 'Random_Forest' in self.model:
+                elif 'Random_Forest' in self.model_name:
                     exp = explainer.explain_instance(tmp, model.predict_proba, num_features=feature_size, top_labels=1)
 
                 else:
                     raise ValueError('exp must be "XGboost or Random_Forest')
 
-                if 'HELOC' in self.in_path:
-
-                    sav_name = 'result/heloc/LIME_result_'+model_n+'_' + str(index) + '(' + exp_n_list[i] + ')' + '.html'
-                elif 'UCI_Credit_Card' in self.in_path:
-                    sav_name = 'result/UCI_Credit_Card/LIME_result_'+model_n+'_' + str(index) + '(' + exp_n_list[i] + ')' + '.html'
-
+                sav_name = 'result/'+ self.data_name +'/LIME_result_'+model_n+'_' + str(index) + '(' + exp_n_list[i] + ')' + '.html'
                 exp.save_to_file(sav_name)
 
         print ('\nComplete!')

@@ -5,6 +5,7 @@ from Data_processing import make_train_test
 from Data_processing import fico_data_preprocessing
 from Data_processing import UCI_data_preprocessing
 from Data_processing import make_explain_data
+import os
 
 import argparse
 
@@ -20,8 +21,10 @@ if __name__ == '__main__':
         file_path=fico_data_preprocessing(args.data_path)
     elif 'UCI_Credit_Card' in args.data_path:
         file_path=UCI_data_preprocessing(args.data_path)
+    elif 'statlog' in args.data_path:
+        file_path = args.data_path
 
-    #make_test_data(file_path)
+    #make_test_data(file_path)============================================= Modify data path.
     tr_data,te_data, tr_label,te_label=make_train_test(file_path)
 
 
