@@ -11,9 +11,9 @@ from Classifier.XGboost import XGB
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='XAI for financial data')
-    parser.add_argument('--data_path', type=str, default='Dataset/statlog.csv', help='Dataset path')
+    parser.add_argument('--data_path', type=str, default='Dataset/UCI_Credit_Card.csv', help='Dataset path')
     parser.add_argument('--model_name', type=str, default='XGboost', help='Model name')
-    parser.add_argument('--Explanation',type=str, default='Shap', help='Explanation method')
+    parser.add_argument('--Explanation',type=str, default='Anchors', help='Explanation method')
     args = parser.parse_args()
 
     # preprocessing
@@ -26,7 +26,6 @@ if __name__ == '__main__':
 
     # make_test_data(file_path)
     tr_data, te_data, tr_label, te_label = make_train_test(file_path)
-
     if "XGboost" == args.model_name:
         model = XGB(args.model_name, file_path)
     elif "Random_Forest" == args.model_name:
@@ -34,7 +33,11 @@ if __name__ == '__main__':
 
     model.train(tr_data, tr_label)
     model.test(te_data, te_label)
+    f_roc = model.draw_roc_curve()
+    f_roc.show()
 
+    if "Random_Forest" == args.model_name:
+        model.draw_feature_importance().show()
     # generating data for explaining using test dataset
     prob = model.get_prob(te_data)
     make_explain_data(te_data, prob, args.model_name, file_path)
