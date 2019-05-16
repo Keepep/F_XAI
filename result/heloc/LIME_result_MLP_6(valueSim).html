@@ -37088,25 +37088,25 @@
 /***/ })
 /******/ ]);
 //# sourceMappingURL=bundle.js.map </script></head><body>
-        <div class="lime top_div" id="top_div2IC5OD9AXC507MS"></div>
+        <div class="lime top_div" id="top_divZ9ES7J2GOYLULL8"></div>
         
         <script>
-        var top_div = d3.select('#top_div2IC5OD9AXC507MS').classed('lime top_div', true);
+        var top_div = d3.select('#top_divZ9ES7J2GOYLULL8').classed('lime top_div', true);
         
             var pp_div = top_div.append('div')
                                 .classed('lime predict_proba', true);
             var pp_svg = pp_div.append('svg').style('width', '100%');
-            var pp = new lime.PredictProba(pp_svg, ["Bad", "Good"], [0.29623380303382874, 0.7037661671638489]);
+            var pp = new lime.PredictProba(pp_svg, ["Bad", "Good"], [0.5894380211830139, 0.4105619788169861]);
             
         
         var exp_div;
             var exp = new lime.Explanation(["Bad", "Good"]);
         
                 exp_div = top_div.append('div').classed('lime explanation', true);
-                exp.show([["PercentTradesWBalance", -0.01817936239905238], ["MSinceMostRecentDelq", -0.017879919743595866], ["MSinceMostRecentTradeOpen", -0.01621093249993366], ["AverageMInFile", -0.01462800274400084], ["NumTradesOpeninLast12M", -0.014568091750645912], ["NumTrades60Ever2DerogPubRec", -0.014538130943711564], ["NumTrades90Ever2DerogPubRec", -0.013395519914425601], ["NetFractionRevolvingBurden", -0.012300624710270412], ["NumSatisfactoryTrades", 0.012099238655235059], ["NumInqLast6M", -0.011003768030943916], ["NumInqLast6Mexcl7days", -0.010651155544860935], ["NumInstallTradesWBalance", -0.010538299144195516], ["NumTotalTrades", 0.009960161486061566], ["MSinceMostRecentInqexcl7days", -0.008769824287682212], ["NumBank2NatlTradesWHighUtilization", -0.0057574410569715614], ["PercentInstallTrades", 0.005562374400555298], ["MSinceOldestTradeOpen", -0.005063508245663982], ["MaxDelqEver", 0.0037450204030288416], ["NumRevolvingTradesWBalance", -0.0036244412110713383], ["MaxDelq2PublicRecLast12M", 0.0020631771965428304], ["PercentTradesNeverDelq", 0.000605305372860383], ["NetFractionInstallBurden", -7.110993421627991e-05]], 1, exp_div);
+                exp.show([["NumTradesOpeninLast12M", 0.03545888342076343], ["NetFractionRevolvingBurden", 0.024936609243722867], ["MaxDelqEver", 0.02171263133106131], ["MaxDelq2PublicRecLast12M", 0.020507043260916437], ["PercentTradesNeverDelq", 0.019462003585606208], ["PercentInstallTrades", 0.019218544549253903], ["MSinceOldestTradeOpen", 0.01873991372129272], ["PercentTradesWBalance", 0.016952584233015586], ["NumSatisfactoryTrades", 0.015651627842460304], ["NumBank2NatlTradesWHighUtilization", 0.014901024797823974], ["NumInstallTradesWBalance", 0.014388282312820588], ["NumTotalTrades", 0.014198249600895826], ["NetFractionInstallBurden", 0.01265070697722641], ["NumRevolvingTradesWBalance", 0.010602756888521421], ["MSinceMostRecentTradeOpen", 0.010385709251742628], ["NumTrades90Ever2DerogPubRec", 0.009425855225622854], ["NumTrades60Ever2DerogPubRec", 0.008606802521775675], ["AverageMInFile", 0.006820109881091813], ["NumInqLast6Mexcl7days", 0.006626108017676586], ["NumInqLast6M", 0.006478234098466848], ["MSinceMostRecentDelq", 0.006211323148582212], ["MSinceMostRecentInqexcl7days", 0.0010953444154696392]], 0, exp_div);
                 
         var raw_div = top_div.append('div');
-            exp.show_raw_tabular([["PercentTradesWBalance", "50.00", -0.01817936239905238], ["MSinceMostRecentDelq", "-7.00", -0.017879919743595866], ["MSinceMostRecentTradeOpen", "2.00", -0.01621093249993366], ["AverageMInFile", "63.00", -0.01462800274400084], ["NumTradesOpeninLast12M", "1.00", -0.014568091750645912], ["NumTrades60Ever2DerogPubRec", "0.00", -0.014538130943711564], ["NumTrades90Ever2DerogPubRec", "0.00", -0.013395519914425601], ["NetFractionRevolvingBurden", "25.00", -0.012300624710270412], ["NumSatisfactoryTrades", "38.00", 0.012099238655235059], ["NumInqLast6M", "1.00", -0.011003768030943916], ["NumInqLast6Mexcl7days", "1.00", -0.010651155544860935], ["NumInstallTradesWBalance", "1.00", -0.010538299144195516], ["NumTotalTrades", "40.00", 0.009960161486061566], ["MSinceMostRecentInqexcl7days", "0.00", -0.008769824287682212], ["NumBank2NatlTradesWHighUtilization", "1.00", -0.0057574410569715614], ["PercentInstallTrades", "53.00", 0.005562374400555298], ["MSinceOldestTradeOpen", "220.00", -0.005063508245663982], ["MaxDelqEver", "8.00", 0.0037450204030288416], ["NumRevolvingTradesWBalance", "5.00", -0.0036244412110713383], ["MaxDelq2PublicRecLast12M", "7.00", 0.0020631771965428304], ["PercentTradesNeverDelq", "100.00", 0.000605305372860383], ["NetFractionInstallBurden", "67.00", -7.110993421627991e-05]], 1, raw_div);
+            exp.show_raw_tabular([["NumTradesOpeninLast12M", "6.00", 0.03545888342076343], ["NetFractionRevolvingBurden", "69.00", 0.024936609243722867], ["MaxDelqEver", "8.00", 0.02171263133106131], ["MaxDelq2PublicRecLast12M", "7.00", 0.020507043260916437], ["PercentTradesNeverDelq", "100.00", 0.019462003585606208], ["PercentInstallTrades", "46.00", 0.019218544549253903], ["MSinceOldestTradeOpen", "255.00", 0.01873991372129272], ["PercentTradesWBalance", "75.00", 0.016952584233015586], ["NumSatisfactoryTrades", "24.00", 0.015651627842460304], ["NumBank2NatlTradesWHighUtilization", "1.00", 0.014901024797823974], ["NumInstallTradesWBalance", "2.00", 0.014388282312820588], ["NumTotalTrades", "24.00", 0.014198249600895826], ["NetFractionInstallBurden", "40.00", 0.01265070697722641], ["NumRevolvingTradesWBalance", "3.00", 0.010602756888521421], ["MSinceMostRecentTradeOpen", "6.00", 0.010385709251742628], ["NumTrades90Ever2DerogPubRec", "0.00", 0.009425855225622854], ["NumTrades60Ever2DerogPubRec", "0.00", 0.008606802521775675], ["AverageMInFile", "57.00", 0.006820109881091813], ["NumInqLast6Mexcl7days", "0.00", 0.006626108017676586], ["NumInqLast6M", "0.00", 0.006478234098466848], ["MSinceMostRecentDelq", "-7.00", 0.006211323148582212], ["MSinceMostRecentInqexcl7days", "-7.00", 0.0010953444154696392]], 0, raw_div);
         
         </script>
         </body></html>

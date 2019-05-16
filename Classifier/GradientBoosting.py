@@ -9,23 +9,32 @@ class GBM():
     def __init__(self, model_name, file_path):
         data_name="GBM"
         # get filename and remove .csv
-        file_name = os.path.basename(file_path)[:-4]
-        self.trained_model_path = 'Classifier/trained_model/' + data_name + '_' + file_name + '.sav'
-
+        self.file_name = os.path.basename(file_path)[:-4]
+        self.trained_model_path = 'Classifier/trained_model/' + data_name + '_' + self.file_name + '.sav'
+        self.column_name = None
+        self.label_name = None
 
     def train(self, tr_data, tr_label):
         model =GradientBoostingClassifier(n_estimators=100, min_samples_split=4,random_state=1)
         model.fit(tr_data, tr_label)
 
         result = model.score(tr_data, tr_label)
-        print 'Train Accuracy: {0:02f}'.format(result)
+
 
         pickle.dump(model, open(self.trained_model_path,'wb'))
+        self.train_fpr, self.train_tpr, roc = self.get_roc(tr_data, tr_label)
+        print 'Train ROC: '+str(roc)
+        print 'Train AR: '+str(roc*2-1)
+        print 'Train Accuracy: {0:02f}'.format(result)
 
     def test(self, te_data, te_label):
 
         model = pickle.load(open(self.trained_model_path,'rb'))
         result = model.score(te_data, te_label)
+        self.test_fpr, self.test_tpr, roc = self.get_roc(te_data, te_label)
+
+        print 'Test ROC: '+str(roc)
+        print 'Test AR: '+str(roc*2-1)
 
         print 'Test Accuracy: {0:02f}'.format(result)
 
