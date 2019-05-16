@@ -5,6 +5,7 @@ from Explanation.LIME.LIME_tabular import *
 import xgboost as xgb
 from pandas import DataFrame as df
 from tqdm import tqdm
+<<<<<<< HEAD
 import sys, os
 import torch
 from torch.autograd import Variable
@@ -14,6 +15,10 @@ from torch.autograd import Variable
 def cuda_available():
     use_cuda = torch.cuda.is_available()
     return use_cuda
+=======
+import fnmatch
+import sys, os
+>>>>>>> origin/master
 
 class lime_libraray():
     def __init__(self, in_path, model_name):
@@ -48,6 +53,7 @@ class lime_libraray():
 
         if 'Random_Forest' in self.model_name:
             model_n = 'RF'
+<<<<<<< HEAD
             ext='.sav'
         elif 'XGboost' in self.model_name:
             model_n = 'XGboost'
@@ -62,6 +68,14 @@ class lime_libraray():
         class_name.append(self.class_label[0])
         class_name.append(self.class_label[1])
 
+=======
+        elif 'XGboost' in self.model_name:
+            model_n = 'XGboost'
+
+        del feature_names[self.feature_i]
+        class_name.append(self.class_label[0])
+        class_name.append(self.class_label[1])
+>>>>>>> origin/master
         df_explain_valueSim = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_valueSim.csv')
         df_explain_probSim = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_probSim.csv')
         df_explain_random = pd.read_csv("Explain_te_data/"+ self.data_name +"/" + model_n + '_explain_random.csv')
@@ -70,6 +84,7 @@ class lime_libraray():
                                  class_names=class_name, discretize_continuous=False)
         # get file name and remove .csv
         file_name = os.path.basename(self.in_path)[:-4]
+<<<<<<< HEAD
         saved_model_path = 'Classifier/trained_model/' + model_n + '_' + file_name +ext
 
         model = pickle.load(open(saved_model_path, 'rb'))
@@ -81,6 +96,10 @@ class lime_libraray():
                 model.cuda()
 
 
+=======
+        saved_model_path = 'Classifier/trained_model/' + model_n + '_' + file_name +'.sav'
+        model = pickle.load(open(saved_model_path, 'rb'))
+>>>>>>> origin/master
 
         exp_list = [df_explain_valueSim,df_explain_probSim,df_explain_random]
 

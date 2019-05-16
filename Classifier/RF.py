@@ -29,22 +29,18 @@ class RF():
         model.fit(tr_data, tr_label)
         self.feature_imp = model.feature_importances_
         result = model.score(tr_data, tr_label)
+        self.train_fpr, self.train_tpr, roc = self.get_roc(tr_data, tr_label)
 
         # print 'Train Accuracy: {0:02f}'.format(result)
         # print 'Train AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1)
         pickle.dump(model, open(self.trained_model_path,'wb'))
-
-        self.train_fpr, self.train_tpr, roc = self.get_roc(tr_data, tr_label)
-        print 'Train ROC: '+str(roc)
-        print 'Train AR: '+str(roc*2-1)
 
     def test(self, te_data, te_label):
 
         model = pickle.load(open(self.trained_model_path,'rb'))
         result = model.score(te_data, te_label)
         self.test_fpr, self.test_tpr, roc = self.get_roc(te_data, te_label)
-        print 'Test ROC: '+str(roc)
-        print 'Test AR: '+str(roc*2-1)
+
         # print 'Test Accuracy: {0:02f}'.format(result)
         # print 'Test AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1)
 
