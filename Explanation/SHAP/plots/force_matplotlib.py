@@ -342,6 +342,8 @@ def draw_additive_plot(data, figsize, show, text_rotation=0):
     # Compute overall metrics
     base_value = data['baseValue']
     out_value = data['outValue']
+    print('base value',base_value)
+    print('out value',out_value)
     offset_text = (np.abs(total_neg) + np.abs(total_pos)) * 0.04
     
     # Define plots
@@ -393,6 +395,7 @@ def draw_additive_plot(data, figsize, show, text_rotation=0):
     
     if show:
         plt.show()
+        return neg_features, pos_features, out_value
     else:
         return plt.gcf()
     

@@ -29,16 +29,20 @@ class shap_library():
 
         # Get shapley values
         shap_value = explainer.shap_values(te_data[ins:ins+1], nsamples=100)
+        print(shap_value)
+        print(sum(shap_value[0][0]))
+        print(sum(shap_value[1][0]))
 
         if(explainer.expected_value[0] > explainer.expected_value[1]):
             target = 0
         else:
             target = 1
-        neg, pos =force_plot(explainer.expected_value[target], shap_value[target], te_data.iloc[ins], matplotlib=True, link="logit")
-
+        neg, pos, out =force_plot(explainer.expected_value[target], shap_value[target], te_data.iloc[ins], matplotlib=True, link="logit")
+        feature_importance = model.feature
         print('Expect: {0}, Probability: {1}'.format(target, explainer.expected_value[target]))
         print('[0] Contribution [1] Real value [2] Name of feature')
         print('Negative')
         print(neg)
         print('Positive')
         print(pos)
+        print(out)
