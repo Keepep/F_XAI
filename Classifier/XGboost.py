@@ -23,8 +23,8 @@ class XGB():
         result = model.score(tr_data, tr_label)
         self.train_fpr, self.train_tpr, roc = self.get_roc(tr_data, tr_label)
 
-        # print 'Train Accuracy: {0:02f}'.format(result)
-        print('Train AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
+        # print('Train Accuracy: {0:02f}'.format(result))
+        # print('Train AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
         pickle.dump(model, open(self.trained_model_path,'wb'))
 
     def test(self, te_data, te_label):
@@ -33,8 +33,8 @@ class XGB():
         result=model.score(te_data,te_label)
         self.test_fpr, self.test_tpr, roc = self.get_roc(te_data, te_label)
 
-        # print 'Test Accuracy: {0:02f}'.format(result)
-        print('Test AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
+        # print('Test Accuracy: {0:02f}'.format(result))
+        # print('Test AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
 
     def get_prob(self, te_data):
         model=pickle.load(open(self.trained_model_path,'rb'))
@@ -42,6 +42,11 @@ class XGB():
 
         return prob
 
+    def get_pred(self, tr_data):
+        model = pickle.load(open(self.trained_model_path, 'rb'))
+        pred = model.predict(tr_data)
+
+        return pred
     def get_roc(self, x, y):
         if 'HELOC' in self.file_name or 'heloc' in self.file_name:
             y = y.replace(['Good', 'Bad'], [1, 0])

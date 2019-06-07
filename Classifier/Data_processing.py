@@ -8,7 +8,7 @@ import numpy as np
 
 import pickle
 
-def make_train_test(data_path):
+def make_train_test(data_path, normalization = None):
     seed=6237
     load_df=pd.read_csv(data_path)
 
@@ -40,6 +40,13 @@ def make_train_test(data_path):
         te_data = te[features]
         tr_label = tr[label_name]
         te_label = te[label_name]
+
+        if normalization:
+            min_max_scaler = MinMaxScaler()
+            tr_df = min_max_scaler.fit_transform(tr_data)
+            te_df = min_max_scaler.fit_transform(te_data)
+            tr_data = pd.DataFrame(tr_df, columns=features)
+            te_data = pd.DataFrame(te_df, columns=features)
 
     return tr_data, te_data,tr_label, te_label
 
@@ -230,15 +237,19 @@ def make_explain_data(te_data, prob, save_model_path, data_path):
         ##############
         """
 
-def get_data(data_path):
+def get_data(data_path, normalized = None):
 
     # Read file in csv format
     train = pd.read_csv(data_path+'_train.csv')
     test = pd.read_csv(data_path+'_test.csv')
 
     feature, target = get_col_name(data_path, train)
-
     #train_x, test_x, train_y, test_y
+
+    if normalized:
+        scaler = MinMaxScaler()
+        train[feature] = scaler.fit(train[feature])
+        test[feature] = scaler.fit(test[feature])
     return train[feature], test[feature], train[target], test[target]
 
 def get_col_name(data_path, x):
@@ -249,9 +260,10 @@ def get_col_name(data_path, x):
         label_name = 'default.payment.next.month'
     elif 'statlog' in data_path:
         label_name = 'Credit'
+    elif 'LoanStat' in data_path:
+        label_name = 'loan_status'
     else:
         print('label name not vaild!')
         sys.exit(0)
     features = [c for c in x.columns if c != label_name]
-
     return features, label_name

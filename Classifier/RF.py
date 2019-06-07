@@ -30,9 +30,8 @@ class RF():
         self.feature_imp = model.feature_importances_
         result = model.score(tr_data, tr_label)
         self.train_fpr, self.train_tpr, roc = self.get_roc(tr_data, tr_label)
-
-        # print 'Train Accuracy: {0:02f}'.format(result)
-        # print 'Train AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1)
+        # print('Train Accuracy: {0:02f}'.format(result))
+        # print('Train AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
         pickle.dump(model, open(self.trained_model_path,'wb'))
 
     def test(self, te_data, te_label):
@@ -41,24 +40,28 @@ class RF():
         result = model.score(te_data, te_label)
         self.test_fpr, self.test_tpr, roc = self.get_roc(te_data, te_label)
 
-        # print 'Test Accuracy: {0:02f}'.format(result)
-        # print 'Test AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1)
+        # print('Test Accuracy: {0:02f}'.format(result))
+        # print('Test AUROC: {0} / GINI: {1}'.format(roc, 2*roc-1))
 
     def get_prob(self, te_data):
         model=pickle.load(open(self.trained_model_path,'rb'))
         prob=model.predict_proba(te_data)
 
         return prob
+    def get_pred(self, tr_data):
+        model = pickle.load(open(self.trained_model_path,'rb'))
+        pred = model.predict(tr_data)
+
+        return pred
 
     def draw_feature_importance(self, x=None):
         if self.column_name == None:
             self.column_name, _ = (self.file_name, x)
-        i = np.argsort(-self.feature_imp)
+        i = np.argsort(self.feature_imp)
         feature = [self.column_name[ix] for ix in i]
-        index = np.arange(len(self.feature_imp))
         fig1 = plt.figure()
-        plt.bar(index, self.feature_imp[i])
-        plt.xticks(index, feature, rotation=90)
+        plt.barh(np.arange(len(i)), self.feature_imp[i])
+        plt.yticks(np.arange(len(i)), feature)
         plt.title('Feature importance of Random forest')
         plt.xlabel('Feature name')
         plt.ylabel('Importance')
