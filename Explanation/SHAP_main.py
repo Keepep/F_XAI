@@ -16,6 +16,9 @@ class shap_library():
             model_name = 'RF'
         elif 'XGboost' == self.model:
             model_name = 'XGboost'
+        elif 'GBM' == self.model:
+            model_name = 'GBM'
+
         self.model_path = 'Classifier/trained_model/'+model_name+'_'+os.path.basename(self.in_path)[:-4]+'.sav'
 
     def build_for_FICO(self):

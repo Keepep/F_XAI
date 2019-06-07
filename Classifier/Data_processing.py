@@ -141,20 +141,24 @@ def make_explain_data(te_data, prob, save_model_path, data_path):
     #genearating probsim data
     prob=prob[:,0]
     prob_index=np.argsort(prob)
+    np.random.seed(6237)
 
-
-    base_index=random.randrange(int(prob.shape[0]/2),prob.shape[0])
-    while( prob[prob_index[base_index]] <= 0.5):
-        base_index = random.randrange(int(prob.shape[0] / 2), prob.shape[0])
+    #base_index=random.randrange(int(prob.shape[0]/2),prob.shape[0])
+    while(True):
+        base_index = random.randrange(0, prob.shape[0])
+        if  0.2<=prob[prob_index[base_index]] <= 0.4:
+            break
 
     base_value=load_df_copy.iloc[prob_index[base_index]]
 
     df_probSim=pd.DataFrame([base_value.values.T],columns=np.asarray(base_value.index))
-
     for i in range(10):
         tmp_value = load_df_copy.iloc[prob_index[base_index+i+1]]
 
         tmp = pd.DataFrame([tmp_value.values.T], columns=np.asarray(base_value.index))
+
+        tmp.to_csv('Explain_te_data/' + 'heloc' + '/RF_explain_probSim_'+str(i)+'.csv', index=False)
+
         df_probSim = pd.concat([df_probSim, tmp], ignore_index=True)
 
 
@@ -195,6 +199,14 @@ def make_explain_data(te_data, prob, save_model_path, data_path):
         df_valueSim.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_valueSim.csv', index=False)
         df_probSim.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_probSim.csv', index=False)
         df_random.to_csv('Explain_te_data/'+ data_name +'/XGboost_explain_random.csv', index=False)
+    elif 'GBM' in save_model_path:
+        df_valueSim.to_csv('Explain_te_data/' + data_name + '/GBM_explain_valueSim.csv', index=False)
+        df_probSim.to_csv('Explain_te_data/' + data_name + '/GBM_explain_probSim.csv', index=False)
+        df_random.to_csv('Explain_te_data/' + data_name + '/GBM_explain_random.csv', index=False)
+    elif 'MLP' in save_model_path:
+        df_valueSim.to_csv('Explain_te_data/' + data_name + '/MLP_explain_valueSim.csv', index=False)
+        df_probSim.to_csv('Explain_te_data/' + data_name + '/MLP_explain_probSim.csv', index=False)
+        df_random.to_csv('Explain_te_data/' + data_name + '/MLP_explain_random.csv', index=False)
 
         """
         #######

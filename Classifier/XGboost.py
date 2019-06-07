@@ -1,11 +1,9 @@
 import xgboost as xgb
 import pickle
 import os
+from matplotlib import pyplot as plt
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
-from matplotlib import pyplot as plt
-
-import numpy as np
 class XGB():
     def __init__(self, model_name, file_path):
         if model_name == 'XGboost':
@@ -39,7 +37,6 @@ class XGB():
     def get_prob(self, te_data):
         model=pickle.load(open(self.trained_model_path,'rb'))
         prob=model.predict_proba(te_data)
-
         return prob
 
     def get_pred(self, tr_data):
